@@ -39,19 +39,19 @@ function visRetterne() {
         if (ret.house == "Ravenclaw") {
           document.querySelector(
             "#indhold"
-          ).innerHTML += `<img src="billeder/gul.jpg" alt="gul" height="200" width="200">`;
+          ).innerHTML += `<img src="billeder/blue.png" alt="gul" height="200" width="200">`;
         } else if (ret.house == "Slytherin") {
           document.querySelector(
             "#indhold"
-          ).innerHTML += `<img src="billeder/red.jpg" alt="gul" height="200" width="200">`;
+          ).innerHTML += `<img src="billeder/green.png" alt="gul" height="200" width="200">`;
         } else if (ret.house == "Gryffindor") {
           document.querySelector(
             "#indhold"
-          ).innerHTML += `<img src="billeder/blaa.jpg" alt="gul" height="200" width="200">`;
+          ).innerHTML += `<img src="billeder/red.png" alt="gul" height="200" width="200">`;
         } else if (ret.house == "Hufflepuff") {
           document.querySelector(
             "#indhold"
-          ).innerHTML += `<img src="billeder/green.jpg" alt="gul" height="200" width="200">`;
+          ).innerHTML += `<img src="billeder/yellow.png" alt="gul" height="200" width="200">`;
         }
         start();
       }
