@@ -2,6 +2,34 @@ body {
   margin: 0;
   background-color: white;
 }
+.raven {
+  position: absolute;
+  top: 25vw;
+  left: 40vw;
+  height: 20vw;
+  width: 20vw;
+}
+.fugl {
+  position: absolute;
+  top: 25vw;
+  left: 40vw;
+  height: 15vw;
+  width: 15vw;
+}
+.bi {
+  position: absolute;
+  top: 25vw;
+  left: 40vw;
+  height: 15vw;
+  width: 15vw;
+}
+.snake {
+  position: absolute;
+  top: 25vw;
+  left: 37vw;
+  height: 15vw;
+  width: 25vw;
+}
 #pop-op {
   z-index: 2;
 }

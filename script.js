@@ -39,19 +39,27 @@ function visRetterne() {
         if (ret.house == "Ravenclaw") {
           document.querySelector(
             "#indhold"
-          ).innerHTML += `<img src="billeder/blue.png" alt="gul" height="200" width="200">`;
+          ).innerHTML += `<img class="raven" src="billeder/blue.png" alt="gul" height="200" width="200">`;
+          document.querySelector("#pop-op").style.background =
+            "rgba(4, 4, 94, 0.5)";
         } else if (ret.house == "Slytherin") {
           document.querySelector(
             "#indhold"
-          ).innerHTML += `<img src="billeder/green.png" alt="gul" height="200" width="200">`;
+          ).innerHTML += `<img class="snake" src="billeder/green.png" alt="gul" height="200" width="200">`;
+          document.querySelector("#pop-op").style.background =
+            "rgba(1, 71, 65, 0.5)";
         } else if (ret.house == "Gryffindor") {
           document.querySelector(
             "#indhold"
-          ).innerHTML += `<img src="billeder/red.png" alt="gul" height="200" width="200">`;
+          ).innerHTML += `<img class="fugl" src="billeder/red.png" alt="gul" height="200" width="200">`;
+          document.querySelector("#pop-op").style.background =
+            "rgba(87, 5, 28, 0.5)";
         } else if (ret.house == "Hufflepuff") {
           document.querySelector(
             "#indhold"
-          ).innerHTML += `<img src="billeder/yellow.png" alt="gul" height="200" width="200">`;
+          ).innerHTML += `<img class="bi" src="billeder/yellow.png" alt="gul" height="200" width="200">`;
+          document.querySelector("#pop-op").style.background =
+            "rgba(84, 67, 30, 0.5)";
         }
         start();
       }
