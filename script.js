@@ -1,8 +1,9 @@
 //nogle af funktionerne er kopiret fra en gammel opgave, derfor de har unormale navne. Ændre senere
+"use strict";
 document.addEventListener("DOMContentLoaded", start);
 ("use scrict");
 
-let retter = [];
+let personer = [];
 //variabel for indholdet
 let filter = "All Houses";
 //variable for filter
@@ -10,20 +11,24 @@ let filter = "All Houses";
 async function start() {
   const json = await fetch("http://petlatkea.dk/2019/students1991.json");
 
-  retter = await json.json();
+  personer = await json.json();
   //Henter data fra JSON fil ned
-  retter.sort((a, b) => {
+  sorting(personer);
+  visPersoner();
+}
+
+function sorting(personer) {
+  personer.sort((a, b) => {
     return a.fullname.localeCompare(b.fullname);
   });
   //Sortere alfabetisk
-  visRetterne();
 }
 
-function visRetterne() {
+function visPersoner() {
   let liste = document.querySelector("#liste");
   liste.innerHTML = "";
 
-  retter.forEach(ret => {
+  personer.forEach(ret => {
     if (filter == "All Houses" || ret.house == filter) {
       let template = `<div class="mineretter"><h2> ${ret.fullname}</h2><p>${ret.house}</p></div>`;
       liste.insertAdjacentHTML("beforeend", template);
@@ -57,7 +62,7 @@ function visRetterne() {
         } else if (ret.house == "Gryffindor") {
           document.querySelector(
             "#indhold"
-          ).innerHTML += `<img class="fugl" src="billeder/red.png" alt="gul" height="200" width="200">`;
+          ).innerHTML += `<img class="fugl" src="billeder/red.png" alt="red" height="200" width="200">`;
           document.querySelector("#pop-op").style.background =
             "rgba(87, 5, 28, 0.5)";
         } else if (ret.house == "Hufflepuff") {
@@ -93,5 +98,5 @@ function filtrering() {
   filter = this.getAttribute("data-hold");
   console.log(filter);
   //filtrering iforhold til hus
-  visRetterne();
+  visPersoner();
 }
