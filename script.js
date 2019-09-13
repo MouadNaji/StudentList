@@ -40,12 +40,16 @@ function sorting() {
   allpersons.sort((a, b) => {
     return a.firstName.localeCompare(b.firstName);
   });
+  this.classList.add("valgt");
+  document.querySelector("#efternavn").classList.remove("valgt");
   visPersoner();
 }
 function sorting2() {
   allpersons.sort((a, b) => {
     return a.lastName.localeCompare(b.lastName);
   });
+  this.classList.add("valgt");
+  document.querySelector("#fornavn").classList.remove("valgt");
   visPersoner();
 }
 

@@ -33,6 +33,11 @@ body {
 #pop-op {
   z-index: 2;
 }
+.navnfilter {
+  width: 5rem;
+  height: 3rem;
+  border-radius: 2rem;
+}
 #overskrift {
   text-align: center;
   font-weight: 5rem;
