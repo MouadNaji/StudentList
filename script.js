@@ -17,7 +17,7 @@ const Array = {
 //prototype variabel
 async function start() {
   const json = await fetch(
-    "http://petlatkea.dk/2019/hogwartsdata/students.json"
+    "https://petlatkea.dk/2019/hogwartsdata/students.json"
   );
 
   personer = await json.json();
