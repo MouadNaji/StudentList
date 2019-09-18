@@ -273,3 +273,21 @@ p {
     font-size: 3vw;
   }
 }
+
+.dissappear {
+  animation-name: dissappear;
+  animation-duration: 0.7s;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.59, -0.56, 0.77, 1.34);
+  animation-fill-mode: forwards;
+}
+
+@keyframes dissappear {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(0);
+  }
+}

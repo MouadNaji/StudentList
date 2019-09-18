@@ -12,7 +12,10 @@ const Array = {
   firstName: "-name",
   middleName: "-type",
   lastName: "-type",
-  house: "-age"
+  house: "-age",
+  photos: "-billeder",
+  id: "-id",
+  gender: "-gender"
 };
 //prototype variabel
 async function start() {
@@ -27,16 +30,51 @@ async function start() {
   //kalder på functionen der viser alt på siden
   prepareObjects(personer);
   //function der sørger for allPersons indeholder alle elementer
+  document.querySelectorAll(".filter").forEach(knap => {
+    knap.addEventListener("click", filtrering);
+    //eventlistener for filter knappen
+    document.querySelector("#fornavn").addEventListener("click", sorting);
+    //sortere efte fornavn
+    document.querySelector("#efternavn").addEventListener("click", sorting2);
+    //sortere efter efternavn
+  });
 }
+function uuid() {
+  let bytes = window.crypto.getRandomValues(new Uint8Array(32));
+  const randomBytes = () => (bytes = bytes.slice(1)) && bytes[0];
 
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+    (c ^ (randomBytes() & (15 >> (c / 4)))).toString(16)
+  );
+}
 function prepareObjects(personer) {
   personer.forEach(person => {
     const students = Object.create(Array);
     const parts = person.fullname.trim().split(" ");
     const houses = person.house.trim();
+
+    //trim bliver brugt til at fjerne det første mellemrum i ordet
     students.firstName = capitalize(parts[0]);
     students.lastName = capitalize(parts[parts.length - 1]);
     students.house = capitalize(houses);
+    if (students.lastName === "Finch-fletchley") {
+      students.lastName = "Fletchley";
+    }
+    if (students.firstName === "Padma") {
+      students.firstName = "Padme";
+    }
+    const tilBilleder = students.lastName.toLowerCase();
+    const tilBilleder2 = students.firstName.charAt(0).toLowerCase();
+    const tilBilleder3 = students.firstName.toLowerCase();
+
+    if (students.lastName === "Patil") {
+      students.photos = `billeder/images/${tilBilleder}_${tilBilleder3}.png`;
+    } else {
+      students.photos = `billeder/images/${tilBilleder}_${tilBilleder2}.png`;
+    }
+
+    students.id = uuid();
+    students.gender = capitalize(person.gender);
 
     if (parts.length === 3) {
       students.middleName = capitalize(parts[1]);
@@ -47,14 +85,10 @@ function prepareObjects(personer) {
     if (parts.length === 1) {
       students.middleName = "";
       students.lastName = "";
+      students.photos = `billeder/images/li_s.png`;
     }
 
     allPersons.push(students);
-
-    document.querySelector("#fornavn").addEventListener("click", sorting);
-    //sortere efte fornavn
-    document.querySelector("#efternavn").addEventListener("click", sorting2);
-    //sortere efter efternavn
   });
 
   visAlt();
@@ -63,7 +97,7 @@ function prepareObjects(personer) {
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
-
+// funktionen capitalize bliver brugt til at gøre det første bogstav stort og resten af ordet småt
 function sorting() {
   allPersons.sort((a, b) => {
     return a.firstName.localeCompare(b.firstName);
@@ -82,19 +116,31 @@ function sorting2() {
   visAlt();
 }
 //sortering efter efternavn
-
+function filtrering() {
+  document.querySelectorAll(".filter").forEach(knap => {
+    knap.classList.remove("valgt");
+  });
+  this.classList.add("valgt");
+  document.querySelector("h1").textContent = this.textContent;
+  filter = this.getAttribute("data-hold");
+  console.log(filter);
+  //filtrering iforhold til hus
+  visAlt();
+}
 function visAlt() {
   let liste = document.querySelector("#liste");
   liste.innerHTML = "";
 
   allPersons.forEach(person => {
     if (filter == "All Houses" || person.house == filter) {
-      let template = `<div class="mineretter"><h2> ${person.firstName} ${person.middleName}  ${person.lastName}</h2><p>${person.house}</p></div>`;
+      //med denne if sætning sørges der for at der kan filtreres ud fra hvad filter er lig med
+      let template = `<div class="mineretter"><h2> ${person.firstName} ${person.middleName}  ${person.lastName}</h2><img src="${person.photos}" alt="student" height="42" width="42"><p>${person.gender}<br>${person.house}</p><button id="lort" data-id="${person.id}" data-action="remove">Expel Student</button></div>`;
       liste.insertAdjacentHTML("beforeend", template);
       //sætter navn for hver elev og hus-navn ind i html
       liste.lastElementChild.addEventListener("click", () => {
         visSingle(person);
       });
+
       //eventlistener for "klik på elever" så kommer der pop-op med single
     }
   });
@@ -134,20 +180,34 @@ function visSingle(person) {
 function close() {
   document.querySelector("#pop-op").style.display = "none";
   //lukker pop-op
-  document.querySelectorAll(".filter").forEach(knap => {
-    knap.addEventListener("click", filtrering);
-    //eventlistener for filter knappen der skal ændre sig
-  });
 }
 close();
-function filtrering() {
-  document.querySelectorAll(".filter").forEach(knap => {
-    knap.classList.remove("valgt");
-  });
-  this.classList.add("valgt");
-  document.querySelector("h1").textContent = this.textContent;
-  filter = this.getAttribute("data-hold");
-  console.log(filter);
-  //filtrering iforhold til hus
-  visAlt();
+
+document.querySelector("#liste").addEventListener("click", clickSomething);
+
+function clickSomething(event) {
+  const element = event.target;
+
+  if (element.dataset.action === "remove") {
+    element.parentElement.classList.add("dissappear");
+    setTimeout(function() {
+      element.parentElement.remove();
+    }, 700);
+    document.querySelector("#pop-op").style.display = "none";
+
+    console.log("removed the item");
+  }
+  const index = allPersons.findIndex(findFunction);
+  console.table(allPersons);
+
+  //console.log(allPersons.id);
+  function findFunction(persons) {
+    if (persons.id === element.dataset.id) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  //const index = element.dataset.index;
+  allPersons.splice(index, 1);
 }
