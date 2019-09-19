@@ -136,6 +136,7 @@ function visAlt() {
       //med denne if sætning sørges der for at der kan filtreres ud fra hvad filter er lig med
       let template = `<div class="mineretter"><h2> ${person.firstName} ${person.middleName}  ${person.lastName}</h2><img src="${person.photos}" alt="student" height="42" width="42"><p>${person.gender}<br>${person.house}</p><button id="lort" data-id="${person.id}" data-action="remove">Expel Student</button></div>`;
       liste.insertAdjacentHTML("beforeend", template);
+      document.querySelector("#liste2").style.display = "none";
       //sætter navn for hver elev og hus-navn ind i html
       liste.lastElementChild.addEventListener("click", () => {
         visSingle(person);
@@ -209,5 +210,22 @@ function clickSomething(event) {
     }
   }
   //const index = element.dataset.index;
+  nyListe.push(allPersons[index]);
+  console.log(nyListe);
   allPersons.splice(index, 1);
+}
+
+const nyListe = [];
+
+document.querySelector("#expel").addEventListener("click", lavExpelListe);
+
+function lavExpelListe() {
+  let liste = document.querySelector("#liste2");
+  liste.innerHTML = "";
+  nyListe.forEach(ting => {
+    //med denne if sætning sørges der for at der kan filtreres ud fra hvad filter er lig med
+    liste.innerHTML += `<div class="mineretter"><h2> ${ting.firstName} ${ting.middleName}  ${ting.lastName}</h2><img src="${ting.photos}" alt="student" height="42" width="42"><p>${ting.gender}<br>${ting.house}</p></div>`;
+    liste.style.display = "block";
+    liste.style.color = "darkred";
+  });
 }
