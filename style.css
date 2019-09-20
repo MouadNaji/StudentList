@@ -84,6 +84,12 @@ p {
   grid-template-columns: repeat(1, 1fr);
   width: 40vw;
 }
+#liste3 {
+  display: none;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  width: 40vw;
+}
 
 .mineretter {
   margin: 0.5vw;
@@ -204,7 +210,13 @@ p {
     text-align: center;
     margin: 0 5rem;
   }
-
+  #liste3 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-content: center;
+    text-align: center;
+    margin: 0 5rem;
+  }
   #pop-op {
     z-index: 2;
   }
@@ -252,6 +264,10 @@ p {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
+  #liste3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
 
   #billede {
     height: 15vw;
@@ -293,6 +309,9 @@ p {
   #liste2 {
     margin: 0 20vw;
   }
+  #liste3 {
+    margin: 0 20vw;
+  }
 
   #overskrift {
     font-size: 3vw;
@@ -315,4 +334,7 @@ p {
   to {
     transform: scale(0);
   }
+}
+.perfect {
+  color: yellow;
 }

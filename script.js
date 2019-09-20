@@ -134,9 +134,10 @@ function visAlt() {
   allPersons.forEach(person => {
     if (filter == "All Houses" || person.house == filter) {
       //med denne if sætning sørges der for at der kan filtreres ud fra hvad filter er lig med
-      let template = `<div class="mineretter"><h2> ${person.firstName} ${person.middleName}  ${person.lastName}</h2><img src="${person.photos}" alt="student" height="42" width="42"><p>${person.gender}<br>${person.house}</p><button id="lort" data-id="${person.id}" data-action="remove">Expel Student</button></div>`;
+      let template = `<div class="mineretter"><h2> ${person.firstName} ${person.middleName}  ${person.lastName}</h2><img src="${person.photos}" alt="student" height="42" width="42"><p>${person.gender}<br>${person.house}</p><button id="lort" data-id="${person.id}" data-action="remove">Expel Student</button><button id="lort2" data-id="${person.id}" data-action="prefect">Prefect</button></div>`;
       liste.insertAdjacentHTML("beforeend", template);
       document.querySelector("#liste2").style.display = "none";
+      document.querySelector("#liste3").style.display = "none";
       //sætter navn for hver elev og hus-navn ind i html
       liste.lastElementChild.addEventListener("click", () => {
         visSingle(person);
@@ -197,22 +198,22 @@ function clickSomething(event) {
     document.querySelector("#pop-op").style.display = "none";
 
     console.log("removed the item");
-  }
-  const index = allPersons.findIndex(findFunction);
-  console.table(allPersons);
+    const index = allPersons.findIndex(findFunction);
+    console.table(allPersons);
 
-  //console.log(allPersons.id);
-  function findFunction(persons) {
-    if (persons.id === element.dataset.id) {
-      return true;
-    } else {
-      return false;
+    //console.log(allPersons.id);
+    function findFunction(persons) {
+      if (persons.id === element.dataset.id) {
+        return true;
+      } else {
+        return false;
+      }
     }
+    //const index = element.dataset.index;
+    nyListe.push(allPersons[index]);
+    console.log(nyListe);
+    allPersons.splice(index, 1);
   }
-  //const index = element.dataset.index;
-  nyListe.push(allPersons[index]);
-  console.log(nyListe);
-  allPersons.splice(index, 1);
 }
 
 const nyListe = [];
@@ -220,6 +221,7 @@ const nyListe = [];
 document.querySelector("#expel").addEventListener("click", lavExpelListe);
 
 function lavExpelListe() {
+  document.querySelector("#liste3").style.display = "none";
   let liste = document.querySelector("#liste2");
   liste.innerHTML = "";
   nyListe.forEach(ting => {
@@ -227,5 +229,53 @@ function lavExpelListe() {
     liste.innerHTML += `<div class="mineretter"><h2> ${ting.firstName} ${ting.middleName}  ${ting.lastName}</h2><img src="${ting.photos}" alt="student" height="42" width="42"><p>${ting.gender}<br>${ting.house}</p></div>`;
     liste.style.display = "block";
     liste.style.color = "darkred";
+  });
+}
+
+////peeeeeeeeeeeerffffeeeeeeecccctss////////////////////////////////////////////
+const nyListe2 = [];
+
+document.querySelector("#liste").addEventListener("click", clickSomething2);
+let counterForPerfect = 0;
+function clickSomething2(event) {
+  const element = event.target;
+
+  if (element.dataset.action === "prefect") {
+    counterForPerfect++;
+    document.querySelector("#pop-op").style.display = "none";
+
+    console.log("Item made perfect");
+    const index = allPersons.findIndex(findFunction);
+
+    //console.log(allPersons.id);
+    function findFunction(persons) {
+      if (persons.id === element.dataset.id) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    //const index = element.dataset.index;
+
+    if (counterForPerfect < 5) {
+      nyListe2.push(allPersons[index]);
+    } else {
+      alert(`only 4 Students can be in Prefect`);
+    }
+  }
+}
+
+document.querySelector("#prefect").addEventListener("click", lavExpelListe2);
+
+function lavExpelListe2() {
+  document.querySelector("#liste2").style.display = "none";
+  let liste = document.querySelector("#liste3");
+  liste.innerHTML = "";
+
+  nyListe2.forEach(ling => {
+    //med denne if sætning sørges der for at der kan filtreres ud fra hvad filter er lig med
+    liste.innerHTML += `<div class="mineretter"><h2> ${ling.firstName} ${ling.middleName}  ${ling.lastName}</h2><img src="${ling.photos}" alt="student" height="42" width="42"><p>${ling.gender}<br>${ling.house}</p></div>`;
+    liste.style.display = "block";
+    liste.lastElementChild.style.backgroundColor = "green";
   });
 }
