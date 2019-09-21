@@ -6,34 +6,58 @@ body {
   background-color: darkred;
   color: white;
 }
+#prefect {
+  background-color: green;
+  color: white;
+}
+.counts {
+  font-size: 0.7rem;
+  display: grid;
+  padding: 0;
+  margin: 0;
+  align-content: center;
+  font-family: monospace;
+}
+.counts h2 {
+  padding: 0;
+  margin: 0;
+}
 
 .raven {
-  position: absolute;
-  top: 25vw;
-  left: 40vw;
   height: 20vw;
   width: 20vw;
 }
+.ravenen {
+  align-content: center;
+  width: 100%;
+  text-align: center;
+}
 .fugl {
-  position: absolute;
-  top: 25vw;
-  left: 40vw;
   height: 15vw;
   width: 15vw;
+}
+.fuglen {
+  align-content: center;
+  width: 100%;
+  text-align: center;
 }
 .bi {
-  position: absolute;
-  top: 25vw;
-  left: 40vw;
   height: 15vw;
   width: 15vw;
 }
+.bien {
+  align-content: center;
+  width: 100%;
+  text-align: center;
+}
 .snake {
-  position: absolute;
-  top: 25vw;
-  left: 37vw;
   height: 15vw;
   width: 25vw;
+}
+.snakeen {
+  align-content: center;
+  width: 100%;
+  text-align: center;
 }
 #pop-op {
   z-index: 2;
@@ -91,7 +115,7 @@ p {
   width: 40vw;
 }
 
-.mineretter {
+.mineelever {
   margin: 0.5vw;
   padding-bottom: 1rem;
   opacity: 0.9;
@@ -100,13 +124,13 @@ p {
   width: 100vw;
   background-color: white;
 }
-.mineretter:hover {
+.mineelever:hover {
   opacity: 0.7;
   transition: ease 0.2s;
   box-shadow: rgba(77, 77, 77, 0.5) 0 0 10px;
 }
 
-.mineretter:nth-child(odd) {
+.mineelever:nth-child(odd) {
   background-color: white;
 }
 
@@ -173,9 +197,6 @@ p {
   overflow: scroll;
   border-radius: 1vw;
 }
-.ov {
-  margin-bottom: 1rem;
-}
 
 #lukknap {
   width: 5vw;
@@ -195,6 +216,9 @@ p {
 
   .ov {
     padding-left: 5rem;
+  }
+  .counts {
+    margin-left: 5rem;
   }
   #liste {
     display: grid;
@@ -230,7 +254,7 @@ p {
     width: 40vw;
   }
 
-  .mineretter {
+  .mineelever {
     margin: 0.5vw;
     width: 40vw;
   }
@@ -274,7 +298,7 @@ p {
     width: 20vw;
   }
 
-  .mineretter {
+  .mineelever {
     width: 20vw;
   }
 
@@ -301,6 +325,9 @@ p {
     margin: 0 15vw;
     padding: inherit;
     padding: 1vw 02vw;
+  }
+  .counts {
+    margin: 0 21vw;
   }
 
   #liste {
@@ -335,6 +362,10 @@ p {
     transform: scale(0);
   }
 }
-.perfect {
-  color: yellow;
+.pop-up {
+  text-align: center;
+}
+.pop-up img {
+  width: 7rem;
+  height: 7rem;
 }

@@ -39,15 +39,22 @@ async function start() {
     //sortere efter efternavn
   });
 }
+/////////////////////////////////////henter tilfældigt nummer//////////////////////////////////////////////
+//hentet fra denne hjemmeside https://www.w3resource.com/javascript-exercises/javascript-math-exercise-23.php
 function uuid() {
-  let bytes = window.crypto.getRandomValues(new Uint8Array(32));
-  const randomBytes = () => (bytes = bytes.slice(1)) && bytes[0];
-
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-    (c ^ (randomBytes() & (15 >> (c / 4)))).toString(16)
-  );
+  var dt = new Date().getTime();
+  var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
+    c
+  ) {
+    var r = (dt + Math.random() * 16) % 16 | 0;
+    dt = Math.floor(dt / 16);
+    return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
+  });
+  return uuid;
 }
+/////////////////////////////////////forbereder og opdeler Json fil //////////////////////////////////////////////
 function prepareObjects(personer) {
+  hackTheList();
   personer.forEach(person => {
     const students = Object.create(Array);
     const parts = person.fullname.trim().split(" ");
@@ -87,17 +94,21 @@ function prepareObjects(personer) {
       students.lastName = "";
       students.photos = `billeder/images/li_s.png`;
     }
-
+    prep(students);
     allPersons.push(students);
   });
-
   visAlt();
+
   //sørger for at hvis alt bliver opdateret korrekt efter hvad der sorteres efter
+}
+function prep(x) {
+  console.log(x.lastName);
 }
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 // funktionen capitalize bliver brugt til at gøre det første bogstav stort og resten af ordet småt
+/////////////////////////////////////sorterings funktionerne //////////////////////////////////////////////
 function sorting() {
   allPersons.sort((a, b) => {
     return a.firstName.localeCompare(b.firstName);
@@ -116,6 +127,7 @@ function sorting2() {
   visAlt();
 }
 //sortering efter efternavn
+/////////////////////////////////////filtrering i forhold til hus //////////////////////////////////////////////
 function filtrering() {
   document.querySelectorAll(".filter").forEach(knap => {
     knap.classList.remove("valgt");
@@ -126,15 +138,33 @@ function filtrering() {
   console.log(filter);
   //filtrering iforhold til hus
   visAlt();
+  houseNumbers();
+  if (filter === "All Houses") {
+    document.querySelector("#nsh").textContent = `No house selected`;
+  }
 }
+function hackTheList() {
+  let Mouad = {
+    firstName: "Mouad",
+    middleName: "",
+    lastName: "Naji",
+    house: "Ravenclaw",
+    photos: "billeder/mouad.png",
+    id: uuid(),
+    gender: "Male"
+  };
+  allPersons.push(Mouad);
+}
+/////////////////////////////////////viser HovedListen af alle elever //////////////////////////////////////////////
 function visAlt() {
   let liste = document.querySelector("#liste");
+
   liste.innerHTML = "";
 
   allPersons.forEach(person => {
     if (filter == "All Houses" || person.house == filter) {
       //med denne if sætning sørges der for at der kan filtreres ud fra hvad filter er lig med
-      let template = `<div class="mineretter"><h2> ${person.firstName} ${person.middleName}  ${person.lastName}</h2><img src="${person.photos}" alt="student" height="42" width="42"><p>${person.gender}<br>${person.house}</p><button id="lort" data-id="${person.id}" data-action="remove">Expel Student</button><button id="lort2" data-id="${person.id}" data-action="prefect">Prefect</button></div>`;
+      let template = `<div class="mineelever"><h2> ${person.firstName} ${person.middleName}  ${person.lastName}</h2><img src="${person.photos}" alt="student" height="42" width="42"><p>${person.gender}<br>${person.house}</p><button id="lort" data-id="${person.id}" data-action="remove">Expel Student</button><button id="lort2" data-id="${person.id}" data-action="prefect">Prefect</button></div>`;
       liste.insertAdjacentHTML("beforeend", template);
       document.querySelector("#liste2").style.display = "none";
       document.querySelector("#liste3").style.display = "none";
@@ -146,33 +176,37 @@ function visAlt() {
       //eventlistener for "klik på elever" så kommer der pop-op med single
     }
   });
+  document.querySelector(
+    "#numberofstudents"
+  ).textContent = `Students in total: ${allPersons.length}`;
 }
+/////////////////////////////////////viser personer i signleview//////////////////////////////////////////////
 function visSingle(person) {
   document.querySelector("#pop-op").style.display = "block";
   document.querySelector("#pop-op #lukknap").addEventListener("click", close);
   //sørger for at der kommer pop-op side frem
   document.querySelector(
     "#indhold"
-  ).innerHTML = `<h2> ${person.firstName} ${person.middleName} ${person.lastName}</h2><p>${person.house}</p>`;
+  ).innerHTML = `<div class="pop-up"><h2> ${person.firstName} ${person.middleName} ${person.lastName}</h2><p>${person.house}</p><img src="${person.photos}" alt="student" height="42" width="42"></div>`;
   if (person.house == "Ravenclaw") {
     document.querySelector(
       "#indhold"
-    ).innerHTML += `<img class="raven" src="billeder/blue.png" alt="gul" height="200" width="200">`;
+    ).innerHTML += `<div class="ravenen"><img class="raven" src="billeder/blue.png" alt="gul" height="200" width="200"></div>`;
     document.querySelector("#pop-op").style.background = "rgba(4, 4, 94, 0.5)";
   } else if (person.house == "Slytherin") {
     document.querySelector(
       "#indhold"
-    ).innerHTML += `<img class="snake" src="billeder/green.png" alt="gul" height="200" width="200">`;
+    ).innerHTML += `<div class="snakeen"><img class="snake" src="billeder/green.png" alt="gul" height="200" width="200"></div>`;
     document.querySelector("#pop-op").style.background = "rgba(1, 71, 65, 0.5)";
   } else if (person.house == "Gryffindor") {
     document.querySelector(
       "#indhold"
-    ).innerHTML += `<img class="fugl" src="billeder/red.png" alt="red" height="200" width="200">`;
+    ).innerHTML += `<div class="fuglen"><img class="fugl" src="billeder/red.png" alt="red" height="200" width="200"></div>`;
     document.querySelector("#pop-op").style.background = "rgba(87, 5, 28, 0.5)";
   } else if (person.house == "Hufflepuff") {
     document.querySelector(
       "#indhold"
-    ).innerHTML += `<img class="bi" src="billeder/yellow.png" alt="gul" height="200" width="200">`;
+    ).innerHTML += `<div class="bien"><img class="bi" src="billeder/yellow.png" alt="gul" height="200" width="200"></div>`;
     document.querySelector("#pop-op").style.background =
       "rgba(84, 67, 30, 0.5)";
   }
@@ -185,15 +219,29 @@ function close() {
 }
 close();
 
+/////////////////////////////////////Expel Students //////////////////////////////////////////////
 document.querySelector("#liste").addEventListener("click", clickSomething);
 
 function clickSomething(event) {
   const element = event.target;
+  console.log(allPersons[0].id);
 
-  if (element.dataset.action === "remove") {
+  if (
+    allPersons[0].id === element.dataset.id &&
+    element.dataset.action === "remove"
+  ) {
+    alert("warning! This Student can under no circumstances be EXPELLED!!");
+    document.querySelector("#pop-op").style.display = "none";
+  } else if (element.dataset.action === "remove") {
     element.parentElement.classList.add("dissappear");
     setTimeout(function() {
       element.parentElement.remove();
+
+      if (filter === "All Houses") {
+        document.querySelector("#nsh").textContent = `No house selected`;
+      } else {
+        houseNumbers();
+      }
     }, 700);
     document.querySelector("#pop-op").style.display = "none";
 
@@ -213,6 +261,13 @@ function clickSomething(event) {
     nyListe.push(allPersons[index]);
     console.log(nyListe);
     allPersons.splice(index, 1);
+
+    document.querySelector(
+      "#numberofstudents"
+    ).textContent = `students in total: ${allPersons.length}`;
+    document.querySelector(
+      "#numberofstudentsex"
+    ).textContent = `Expelled students: ${nyListe.length}`;
   }
 }
 
@@ -230,9 +285,10 @@ function lavExpelListe() {
     liste.style.display = "block";
     liste.style.color = "darkred";
   });
+  houseNumbers();
 }
 
-////peeeeeeeeeeeerffffeeeeeeecccctss////////////////////////////////////////////
+/////////////////////////////////////prefect Students //////////////////////////////////////////////
 const nyListe2 = [];
 
 document.querySelector("#liste").addEventListener("click", clickSomething2);
@@ -257,10 +313,14 @@ function clickSomething2(event) {
     }
     //const index = element.dataset.index;
 
-    if (counterForPerfect < 5) {
+    if (counterForPerfect < 2) {
       nyListe2.push(allPersons[index]);
     } else {
-      alert(`only 4 Students can be in Prefect`);
+      counterForPerfect--;
+      alert(
+        `Only 1 Student can be Prefect, The best student in the school!
+        -Go revoke the current prefect student in the prefect list before choosing a new`
+      );
     }
   }
 }
@@ -274,8 +334,24 @@ function lavExpelListe2() {
 
   nyListe2.forEach(ling => {
     //med denne if sætning sørges der for at der kan filtreres ud fra hvad filter er lig med
-    liste.innerHTML += `<div class="mineretter"><h2> ${ling.firstName} ${ling.middleName}  ${ling.lastName}</h2><img src="${ling.photos}" alt="student" height="42" width="42"><p>${ling.gender}<br>${ling.house}</p></div>`;
+    liste.innerHTML += `<div class="mineretter"><h2> ${ling.firstName} ${ling.middleName}  ${ling.lastName}</h2><img src="${ling.photos}" alt="student" height="42" width="42"><p>${ling.gender}<br>${ling.house}</p><button id="revoke">Revoke Prefect</button></div>`;
     liste.style.display = "block";
     liste.lastElementChild.style.backgroundColor = "green";
   });
+  document.querySelector("#revoke").addEventListener("click", revokePrefect);
+}
+
+function revokePrefect() {
+  const element = event.target;
+  counterForPerfect--;
+
+  nyListe2.pop();
+  console.log("done");
+
+  element.parentElement.classList.add("dissappear");
+}
+
+function houseNumbers() {
+  let n = document.querySelector("#liste").childElementCount;
+  document.querySelector("#nsh").textContent = `Students in house: ${n}`;
 }
