@@ -1,15 +1,14 @@
-//nogle af funktionerne er kopiret fra en gammel opgave, derfor de har unormale navne. Ændre senere
 "use strict";
 document.addEventListener("DOMContentLoaded", start);
 
 let personer = [];
-//variabel for indholdet
+//variabel for indholdet af første json fil
 let blodType = [];
-//variabel for indholdet
+//variabel for indhold af blodtype json fil
 let filter = "All Houses";
 //variable for filter
 const allPersons = [];
-//variable for alle
+//variable for endelige liste rigtig organiseret
 const Array = {
   firstName: "-name",
   middleName: "-type",
@@ -20,7 +19,7 @@ const Array = {
   gender: "-gender",
   bloodType: "-type"
 };
-//prototype variabel
+//prototype variabel med alle informationer jeg skal have
 async function start() {
   const json = await fetch(
     "https://petlatkea.dk/2019/hogwartsdata/students.json"
@@ -28,18 +27,18 @@ async function start() {
   const json2 = await fetch(
     "http://petlatkea.dk/2019/hogwartsdata/families.json"
   );
-
+  //henter de 2 json filer
   personer = await json.json();
   blodType = await json2.json();
-  //Henter data fra JSON fil ned
+  //Henter data fra JSON fil ind i variablerne
 
   visAlt();
-  //kalder på functionen der viser alt på siden
+  //kalder på functionen der viser alle elever
   prepareObjects(personer);
-
   //function der sørger for allPersons indeholder alle elementer
   document.querySelectorAll(".filter").forEach(knap => {
     knap.addEventListener("click", filtrering);
+
     //eventlistener for filter knappen
     document.querySelector("#fornavn").addEventListener("click", sorting);
     //sortere efte fornavn
@@ -48,7 +47,7 @@ async function start() {
   });
 }
 /////////////////////////////////////henter tilfældigt nummer//////////////////////////////////////////////
-//hentet fra denne hjemmeside https://www.w3resource.com/javascript-exercises/javascript-math-exercise-23.php
+//kode hentet fra denne hjemmeside https://www.w3resource.com/javascript-exercises/javascript-math-exercise-23.php
 function uuid() {
   var dt = new Date().getTime();
   var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
@@ -67,8 +66,7 @@ function prepareObjects(personer) {
     const students = Object.create(Array);
     const parts = person.fullname.trim().split(" ");
     const houses = person.house.trim();
-
-    //trim bliver brugt til at fjerne det første mellemrum i ordet
+    //trim bliver brugt til at fjerne det første mellemrum i ordet split opdeler indholdet
     students.firstName = capitalize(parts[0]);
     students.lastName = capitalize(parts[parts.length - 1]);
     students.house = capitalize(houses);
@@ -78,6 +76,7 @@ function prepareObjects(personer) {
     if (students.firstName === "Padma") {
       students.firstName = "Padme";
     }
+    //sørger for at de 2 navne er identiske med navne på billed filer
     const tilBilleder = students.lastName.toLowerCase();
     const tilBilleder2 = students.firstName.charAt(0).toLowerCase();
     const tilBilleder3 = students.firstName.toLowerCase();
@@ -87,7 +86,7 @@ function prepareObjects(personer) {
     } else {
       students.photos = `billeder/images/${tilBilleder}_${tilBilleder2}.png`;
     }
-
+    //sørger for billeder bliver sat rigtigt ind
     students.id = uuid();
     students.gender = capitalize(person.gender);
 
@@ -96,18 +95,19 @@ function prepareObjects(personer) {
     } else {
       students.middleName = "";
     }
-    //sørger for at folk med middle Name komemr frem
+    //sørger for at folk med middle Name kommer frem
     if (parts.length === 1) {
       students.middleName = "";
       students.lastName = "";
       students.photos = `billeder/images/li_s.png`;
     }
     prepBloodType(students);
+    //sørger for de rigtige blodtyper kommer ind
     allPersons.push(students);
+    //sørger for at hver elev kommer in i variablen allPersons
   });
   visAlt();
-
-  //sørger for at hvis alt bliver opdateret korrekt efter hvad der sorteres efter
+  //sørger for at alt bliver opdateret korrekt efter hvad der sorteres efter
 }
 function prepBloodType(x) {
   blodType.half.forEach(type => {
@@ -123,6 +123,7 @@ function prepBloodType(x) {
     }
   });
 }
+//funktionen prepBloodType sørger for eleverne får rigtig blood status
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
@@ -162,6 +163,7 @@ function filtrering() {
     document.querySelector("#nsh").textContent = `No house selected`;
   }
 }
+/////////////////////////////////////ny elev bliver sat ind i variablen allPersons //////////////////////////////////////////////
 function hackTheList() {
   let Mouad = {
     firstName: "Mouad",
@@ -188,11 +190,10 @@ function visAlt() {
       liste.insertAdjacentHTML("beforeend", template);
       document.querySelector("#liste2").style.display = "none";
       document.querySelector("#liste3").style.display = "none";
-      //sætter navn for hver elev og hus-navn ind i html
+      //sætter navn for hver elev,billled,køn,id og hus-navn ind i html
       liste.lastElementChild.addEventListener("click", () => {
         visSingle(person);
       });
-
       //eventlistener for "klik på elever" så kommer der pop-op med single
     }
   });
@@ -200,6 +201,7 @@ function visAlt() {
     "#numberofstudents"
   ).textContent = `Students in total: ${allPersons.length}`;
 }
+//viser antal elever i allPersons
 /////////////////////////////////////viser personer i signleview//////////////////////////////////////////////
 function visSingle(person) {
   document.querySelector("#pop-op").style.display = "block";
@@ -241,18 +243,23 @@ close();
 
 /////////////////////////////////////Expel Students //////////////////////////////////////////////
 document.querySelector("#liste").addEventListener("click", clickSomething);
-
+//der sørges for at alle personer der bliver expelled fjernes fra allPersons og kommer i nyListe
 function clickSomething(event) {
   const element = event.target;
   console.log(allPersons[0].id);
-
-  if (
-    allPersons[0].id === element.dataset.id &&
-    element.dataset.action === "remove"
-  ) {
-    alert("warning! This Student can under no circumstances be EXPELLED!!");
-    document.querySelector("#pop-op").style.display = "none";
-  } else if (element.dataset.action === "remove") {
+  allPersons.forEach(person => {
+    if (
+      person.id === element.dataset.id &&
+      person.firstName === "Mouad" &&
+      element.dataset.action === "remove"
+    ) {
+      // sørger for at mouad ikke kan blive expelled
+      alert("warning! This Student can under no circumstances be EXPELLED!!");
+      document.querySelector("#pop-op").style.display = "none";
+      person.dataset.action = "prefect";
+    }
+  });
+  if (element.dataset.action === "remove") {
     element.parentElement.classList.add("dissappear");
     setTimeout(function() {
       element.parentElement.remove();
@@ -263,13 +270,13 @@ function clickSomething(event) {
         houseNumbers();
       }
     }, 700);
+    //sørger for at den kun tæller personer for hvert hus hvis man vælger et husnavn
     document.querySelector("#pop-op").style.display = "none";
-
+    //sørger for pop-op ikke dukker op
     console.log("removed the item");
     const index = allPersons.findIndex(findFunction);
     console.table(allPersons);
 
-    //console.log(allPersons.id);
     function findFunction(persons) {
       if (persons.id === element.dataset.id) {
         return true;
@@ -277,7 +284,7 @@ function clickSomething(event) {
         return false;
       }
     }
-    //const index = element.dataset.index;
+    // der sørges for at den person man har klikket på er den samme som den person der bliver fjernet fra listen
     nyListe.push(allPersons[index]);
     console.log(nyListe);
     allPersons.splice(index, 1);
@@ -289,19 +296,19 @@ function clickSomething(event) {
       "#numberofstudentsex"
     ).textContent = `Expelled students: ${nyListe.length}`;
   }
+  //sørger for at tælleren følger med når trykker expel
 }
 
 const nyListe = [];
 
 document.querySelector("#expel").addEventListener("click", lavExpelListe);
-
+//her sørges der for at eleverne kommer frem i expel listen
 function lavExpelListe() {
   document.querySelector("#liste3").style.display = "none";
   let liste = document.querySelector("#liste2");
   liste.innerHTML = "";
   nyListe.forEach(ting => {
-    //med denne if sætning sørges der for at der kan filtreres ud fra hvad filter er lig med
-    liste.innerHTML += `<div class="mineretter"><h2> ${ting.firstName} ${ting.middleName}  ${ting.lastName}</h2><img src="${ting.photos}" alt="student" height="42" width="42"><p>${ting.gender}<br>${ting.house}</p></div>`;
+    liste.innerHTML += `<div class="mineelever"><h2> ${ting.firstName} ${ting.middleName}  ${ting.lastName}</h2><img src="${ting.photos}" alt="student" height="42" width="42"><p>${ting.gender}<br>${ting.house}</p></div>`;
     liste.style.display = "block";
     liste.style.color = "darkred";
   });
@@ -310,9 +317,10 @@ function lavExpelListe() {
 
 /////////////////////////////////////prefect Students //////////////////////////////////////////////
 const nyListe2 = [];
-
+//der bliver lavet en tredje liste for prefects
 document.querySelector("#liste").addEventListener("click", clickSomething2);
 let counterForPerfect = 0;
+// denne variabel bruges til at tælle antal prefect
 function clickSomething2(event) {
   const element = event.target;
 
@@ -323,7 +331,6 @@ function clickSomething2(event) {
     console.log("Item made perfect");
     const index = allPersons.findIndex(findFunction);
 
-    //console.log(allPersons.id);
     function findFunction(persons) {
       if (persons.id === element.dataset.id) {
         return true;
@@ -331,9 +338,9 @@ function clickSomething2(event) {
         return false;
       }
     }
-    //const index = element.dataset.index;
 
     if (counterForPerfect < 2) {
+      //her sørges for at der kun kan være 1 prefect af gangen
       nyListe2.push(allPersons[index]);
     } else {
       counterForPerfect--;
@@ -346,15 +353,15 @@ function clickSomething2(event) {
 }
 
 document.querySelector("#prefect").addEventListener("click", lavExpelListe2);
-
+// der sørges for at dataen fra nyliste2 kommer frem
 function lavExpelListe2() {
   document.querySelector("#liste2").style.display = "none";
   let liste = document.querySelector("#liste3");
   liste.innerHTML = "";
 
   nyListe2.forEach(ling => {
-    //med denne if sætning sørges der for at der kan filtreres ud fra hvad filter er lig med
-    liste.innerHTML += `<div class="mineretter"><h2> ${ling.firstName} ${ling.middleName}  ${ling.lastName}</h2><img src="${ling.photos}" alt="student" height="42" width="42"><p>${ling.gender}<br>${ling.house}</p><button id="revoke">Revoke Prefect</button></div>`;
+    //her sættes dataen ind i prefect listen
+    liste.innerHTML += `<div class="mineelever"><h2> ${ling.firstName} ${ling.middleName}  ${ling.lastName}</h2><img src="${ling.photos}" alt="student" height="42" width="42"><p>${ling.gender}<br>${ling.house}</p><button id="revoke">Revoke Prefect</button></div>`;
     liste.style.display = "block";
     liste.lastElementChild.style.backgroundColor = "green";
   });
@@ -362,6 +369,7 @@ function lavExpelListe2() {
 }
 
 function revokePrefect() {
+  //her sørges for at man kan revoke
   const element = event.target;
   counterForPerfect--;
 
@@ -372,6 +380,7 @@ function revokePrefect() {
 }
 
 function houseNumbers() {
+  //denne funktion sørger for at tælle hvor mange elever der er i hvert hus ud fra hvor mange childelements der er nå der filtreres
   let n = document.querySelector("#liste").childElementCount;
   document.querySelector("#nsh").textContent = `Students in house: ${n}`;
 }
