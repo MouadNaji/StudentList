@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", start);
 
 let personer = [];
 //variabel for indholdet
+let blodType = [];
+//variabel for indholdet
 let filter = "All Houses";
 //variable for filter
 const allPersons = [];
@@ -15,20 +17,26 @@ const Array = {
   house: "-age",
   photos: "-billeder",
   id: "-id",
-  gender: "-gender"
+  gender: "-gender",
+  bloodType: "-type"
 };
 //prototype variabel
 async function start() {
   const json = await fetch(
     "https://petlatkea.dk/2019/hogwartsdata/students.json"
   );
+  const json2 = await fetch(
+    "http://petlatkea.dk/2019/hogwartsdata/families.json"
+  );
 
   personer = await json.json();
+  blodType = await json2.json();
   //Henter data fra JSON fil ned
 
   visAlt();
   //kalder på functionen der viser alt på siden
   prepareObjects(personer);
+
   //function der sørger for allPersons indeholder alle elementer
   document.querySelectorAll(".filter").forEach(knap => {
     knap.addEventListener("click", filtrering);
@@ -94,15 +102,26 @@ function prepareObjects(personer) {
       students.lastName = "";
       students.photos = `billeder/images/li_s.png`;
     }
-    prep(students);
+    prepBloodType(students);
     allPersons.push(students);
   });
   visAlt();
 
   //sørger for at hvis alt bliver opdateret korrekt efter hvad der sorteres efter
 }
-function prep(x) {
-  console.log(x.lastName);
+function prepBloodType(x) {
+  blodType.half.forEach(type => {
+    if (type === x.lastName) {
+      x.blodType = "Blood Status: half";
+    } else {
+      x.blodType = "Blood Status: plain muggle";
+    }
+  });
+  blodType.pure.forEach(type => {
+    if (type === x.lastName) {
+      x.blodType = "Blood Status: Pure";
+    }
+  });
 }
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -151,7 +170,8 @@ function hackTheList() {
     house: "Ravenclaw",
     photos: "billeder/mouad.png",
     id: uuid(),
-    gender: "Male"
+    gender: "Male",
+    blodType: "Blood Status: Pure"
   };
   allPersons.push(Mouad);
 }
@@ -164,7 +184,7 @@ function visAlt() {
   allPersons.forEach(person => {
     if (filter == "All Houses" || person.house == filter) {
       //med denne if sætning sørges der for at der kan filtreres ud fra hvad filter er lig med
-      let template = `<div class="mineelever"><h2> ${person.firstName} ${person.middleName}  ${person.lastName}</h2><img src="${person.photos}" alt="student" height="42" width="42"><p>${person.gender}<br>${person.house}</p><button id="lort" data-id="${person.id}" data-action="remove">Expel Student</button><button id="lort2" data-id="${person.id}" data-action="prefect">Prefect</button></div>`;
+      let template = `<div class="mineelever"><h2> ${person.firstName} ${person.middleName}  ${person.lastName} </h2><img src="${person.photos}" alt="student" height="42" width="42"><p>${person.gender}<br>${person.house}</p><button id="lort" data-id="${person.id}" data-action="remove">Expel Student</button><button id="lort2" data-id="${person.id}" data-action="prefect">Prefect</button></div>`;
       liste.insertAdjacentHTML("beforeend", template);
       document.querySelector("#liste2").style.display = "none";
       document.querySelector("#liste3").style.display = "none";
@@ -187,7 +207,7 @@ function visSingle(person) {
   //sørger for at der kommer pop-op side frem
   document.querySelector(
     "#indhold"
-  ).innerHTML = `<div class="pop-up"><h2> ${person.firstName} ${person.middleName} ${person.lastName}</h2><p>${person.house}</p><img src="${person.photos}" alt="student" height="42" width="42"></div>`;
+  ).innerHTML = `<div class="pop-up"><h2> ${person.firstName} ${person.middleName} ${person.lastName}</h2><p>${person.house}<br>${person.blodType}</p><img src="${person.photos}" alt="student" height="42" width="42"></div>`;
   if (person.house == "Ravenclaw") {
     document.querySelector(
       "#indhold"
