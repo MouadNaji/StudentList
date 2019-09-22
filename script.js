@@ -112,14 +112,21 @@ function prepareObjects(personer) {
 function prepBloodType(x) {
   blodType.half.forEach(type => {
     if (type === x.lastName) {
-      x.blodType = "Blood Status: half";
+      x.blodType = "Blood Status: Pure";
     } else {
-      x.blodType = "Blood Status: plain muggle";
+      x.blodType = "Blood Status: Pure";
     }
   });
   blodType.pure.forEach(type => {
     if (type === x.lastName) {
-      x.blodType = "Blood Status: Pure";
+      let answer = [
+        "Blood Status: plain muggle",
+        "Blood Status: Half",
+        "Blood Status: Pure"
+      ];
+      var randomAnswer = answer[Math.floor(Math.random() * answer.length)];
+      x.blodType = randomAnswer;
+      console.log(randomAnswer);
     }
   });
 }
@@ -190,6 +197,7 @@ function visAlt() {
       liste.insertAdjacentHTML("beforeend", template);
       document.querySelector("#liste2").style.display = "none";
       document.querySelector("#liste3").style.display = "none";
+      document.querySelector("#liste4").style.display = "none";
       //sætter navn for hver elev,billled,køn,id og hus-navn ind i html
       liste.lastElementChild.addEventListener("click", () => {
         visSingle(person);
@@ -233,6 +241,12 @@ function visSingle(person) {
       "rgba(84, 67, 30, 0.5)";
   }
   //sørger for at logo og farve kommer for hver elev afhængig af hus
+  if (person.blodType === "Blood Status: Pure") {
+    document.querySelector(
+      "#indhold"
+    ).innerHTML += `<div class="beholderl"><button id="lort3" data-id="${person.id}" data-action="Inquisitorial">Inquisitorial squad</button></div>`;
+    document.querySelector("#lort3").addEventListener("click", clickSomething3);
+  }
 }
 
 function close() {
@@ -305,6 +319,7 @@ document.querySelector("#expel").addEventListener("click", lavExpelListe);
 //her sørges der for at eleverne kommer frem i expel listen
 function lavExpelListe() {
   document.querySelector("#liste3").style.display = "none";
+  document.querySelector("#liste4").style.display = "none";
   let liste = document.querySelector("#liste2");
   liste.innerHTML = "";
   nyListe.forEach(ting => {
@@ -329,9 +344,9 @@ function clickSomething2(event) {
     document.querySelector("#pop-op").style.display = "none";
 
     console.log("Item made perfect");
-    const index = allPersons.findIndex(findFunction);
+    const index = allPersons.findIndex(findFunction2);
 
-    function findFunction(persons) {
+    function findFunction2(persons) {
       if (persons.id === element.dataset.id) {
         return true;
       } else {
@@ -352,10 +367,11 @@ function clickSomething2(event) {
   }
 }
 
-document.querySelector("#prefect").addEventListener("click", lavExpelListe2);
+document.querySelector("#prefect").addEventListener("click", lavprefectListe);
 // der sørges for at dataen fra nyliste2 kommer frem
-function lavExpelListe2() {
+function lavprefectListe() {
   document.querySelector("#liste2").style.display = "none";
+  document.querySelector("#liste4").style.display = "none";
   let liste = document.querySelector("#liste3");
   liste.innerHTML = "";
 
@@ -383,4 +399,55 @@ function houseNumbers() {
   //denne funktion sørger for at tælle hvor mange elever der er i hvert hus ud fra hvor mange childelements der er nå der filtreres
   let n = document.querySelector("#liste").childElementCount;
   document.querySelector("#nsh").textContent = `Students in house: ${n}`;
+}
+
+/////////////////////////////////////Inquisitorial Squad //////////////////////////////////////////////
+const nyListe3 = [];
+//der bliver lavet en ny liste for prefects
+function clickSomething3(event) {
+  console.log("clicked inq");
+  const element = event.target;
+  if (element.dataset.action === "Inquisitorial") {
+    element.style.backgroundColor = "darkblue";
+    const index = allPersons.findIndex(findFunction3);
+
+    function findFunction3(persons) {
+      if (persons.id === element.dataset.id) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    nyListe3.push(allPersons[index]);
+    setTimeout(function() {
+      nyListe3.length = 0;
+      document.querySelector("#liste4").innerHTML = "";
+      alert("HAHAHAH! you do not decide the inquisitorial squad!!!");
+    }, 4000);
+    //denne del er hackningnen, hvor alt bliver nulatillet efter lidt tid
+  }
+}
+
+document.querySelector("#Inquisitorial").addEventListener("click", lavInqListe);
+// der sørges for at dataen fra nyliste3 kommer frem
+function lavInqListe() {
+  document.querySelector("#liste2").style.display = "none";
+  document.querySelector("#liste3").style.display = "none";
+  let liste = document.querySelector("#liste4");
+  liste.innerHTML = "";
+
+  nyListe3.forEach(ling => {
+    //her sættes dataen ind i en inquisitorial squad listen
+    liste.innerHTML += `<div class="mineelever"><h2> ${ling.firstName} ${ling.middleName}  ${ling.lastName}</h2><img src="${ling.photos}" alt="student" height="42" width="42"><p>${ling.gender}<br>${ling.house}</p><button class="revoke2">Revoke all</button></div>`;
+    liste.style.display = "block";
+    liste.lastElementChild.style.backgroundColor = "blue";
+    document
+      .querySelector(".revoke2")
+      .addEventListener("click", revokeInquisitorial);
+  });
+}
+function revokeInquisitorial() {
+  // dette bruges når brugeren vil fjerne elever fra inquisitorial squad
+  nyListe3.length = 0;
+  document.querySelector("#liste4").innerHTML = "";
 }

@@ -2,6 +2,21 @@ body {
   margin: 0;
   background-color: white;
 }
+#Inquisitorial {
+  background-color: blue;
+  color: white;
+}
+#lort3 {
+  height: 5rem;
+  widows: 5rem;
+  background-color: blue;
+  color: white;
+  border-radius: 3rem;
+}
+.beholderl {
+  align-content: center;
+  text-align: center;
+}
 #expel {
   background-color: darkred;
   color: white;
@@ -109,6 +124,12 @@ p {
   width: 40vw;
 }
 #liste3 {
+  display: none;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  width: 40vw;
+}
+#liste4 {
   display: none;
   display: grid;
   grid-template-columns: repeat(1, 1fr);
@@ -241,6 +262,13 @@ p {
     text-align: center;
     margin: 0 5rem;
   }
+  #liste4 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-content: center;
+    text-align: center;
+    margin: 0 5rem;
+  }
   #pop-op {
     z-index: 2;
   }
@@ -292,6 +320,10 @@ p {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
+  #liste4 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
 
   #billede {
     height: 15vw;
@@ -310,6 +342,21 @@ p {
     margin-left: auto;
     margin-right: auto;
     border-radius: 2vw;
+  }
+  #Inquisitorial {
+    background-color: blue;
+    color: white;
+  }
+  #lort3 {
+    height: 5rem;
+    widows: 5rem;
+    background-color: blue;
+    color: white;
+    border-radius: 3rem;
+  }
+  .beholderl {
+    align-content: center;
+    text-align: center;
   }
 
   .filter {
@@ -337,6 +384,9 @@ p {
     margin: 0 20vw;
   }
   #liste3 {
+    margin: 0 20vw;
+  }
+  #liste4 {
     margin: 0 20vw;
   }
 
